@@ -15,7 +15,7 @@ YELLOW_RGB = (255, 255, 0)
 WHITE_RGB = (255, 255, 255)
 
 DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
-INTERVAL = 0.5
+INTERVAL = 1
 
 # control Flags
 PAUSE = False
@@ -54,6 +54,7 @@ class Cells(object):
         self. last_refresh = time.time()
 
     def load_pattern(self, pattern):
+        self.clear()
         pos_x, pos_y = (GRID_LENGTH//2 - len(pattern)//2, GRID_LENGTH//2 - len(pattern)//2)
         for i in range(len(pattern)):
             for j in range(len(pattern[0])):
@@ -65,6 +66,10 @@ class Cells(object):
 
     def ready_for_refresh(self):
         return time.time() - self.last_refresh > INTERVAL
+
+    def clear(self):
+        self.cells = [[0] * GRID_LENGTH for _ in range(GRID_LENGTH)]
+        self.last_refresh = time.time()
 
 
 class Button(object):
@@ -104,7 +109,7 @@ def create_grid():
 
 
 def deal_with_events():
-    global PAUSE
+    global PAUSE, INTERVAL
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE \
            or event.type == pygame.QUIT:
@@ -117,7 +122,13 @@ def deal_with_events():
             if in_rect(event.pos, (GRID_LENGTH * CELL_PIXEL + 1, 1,
                                    GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE,
                                    GRID_LENGTH * CELL_PIXEL + 1)):
-                PAUSE = not PAUSE
+                # PAUSE = not PAUSE # pause and start
+                # if INTERVAL >= 0.1: INTERVAL /= 2  # speed up
+                # if INTERVAL <= 100: INTERVAL *= 2  # slow down
+                # cells.clear()  # clear screen
+                cells.load_pattern(patterns.GLIDER)  # load pattern
+
+
 
 
 if __name__ == '__main__':
