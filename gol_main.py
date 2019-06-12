@@ -16,23 +16,25 @@ DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 
 
 class Cells(object):
     def __init__(self):
-        self.cells = [[0] * GRID_LENGTH for _ in GRID_LENGTH]
+        self.cells = [[0] * GRID_LENGTH for _ in range(GRID_LENGTH)]
 
     def draw(self, screen):
         for x in range(GRID_LENGTH):
             for y in range(GRID_LENGTH):
                 if self.cells[x][y] == 1:
-                    rect = [self.x * CELL_PIXEL + 1, self.y * CELL_PIXEL + 1, CELL_PIXEL - 1, CELL_PIXEL - 1]
+                    rect = [x * CELL_PIXEL + 1, y * CELL_PIXEL + 1, CELL_PIXEL - 1, CELL_PIXEL - 1]
                     pygame.draw.rect(screen, YELLOW_RGB, rect)
 
     def count_live_neighbours(self, x, y):
         cnt = 0
         for x_bias, y_bias in DIRECTIONS:
-            cnt += self.cells[x + x_bias][y + y_bias]
+            if 0 <= x + x_bias < GRID_LENGTH and\
+               0 <= y + y_bias < GRID_LENGTH:
+                cnt += self.cells[x + x_bias][y + y_bias]
         return cnt
 
-    def get_next(self):
-        new_cells = [[0] * GRID_LENGTH for _ in GRID_LENGTH]
+    def update(self):
+        new_cells = [[0] * GRID_LENGTH for _ in range(GRID_LENGTH)]
         for x in range(GRID_LENGTH):
             for y in range(GRID_LENGTH):
                 cnt = self.count_live_neighbours(x, y)
@@ -78,5 +80,13 @@ if __name__ == '__main__':
 
     while 1:
         screen.blit(grid, (0, 0))
+        cells.update()
+
+        screen.blit(grid, (0, 0))
+        cells.draw(screen)
+        screen.blit(screen, (0, 0))
+        pygame.display.flip()
+
+
 
 
