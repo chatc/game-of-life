@@ -1,7 +1,8 @@
 import pygame
 import sys
-import copy
+import time
 import patterns
+from utils import *
 
 # consts
 GRID_LENGTH = 100
@@ -81,9 +82,8 @@ def deal_with_events():
         if event.type == pygame.MOUSEMOTION:
             if mouse_activate:
                 mouse_x, mouse_y = event.pos
-                if mouse_x - 1 > 0 and mouse_y - 1 > 0:
+                if in_rect(event.pos, (1, 1, GRID_LENGTH * CELL_PIXEL, GRID_LENGTH * CELL_PIXEL)):
                     cells.toggle_status(int((mouse_x - 1)/5), int((mouse_y - 1)/5))
-
 
 
 
@@ -99,14 +99,13 @@ if __name__ == '__main__':
     cells = Cells()
     cells.load_pattern(patterns.GLIDER)
     while 1:
-        set_speed(1)
+        set_speed(0)
         screen.blit(grid, (0, 0))
-        cells.update()
-
         deal_with_events()
 
-        screen.blit(grid, (0, 0))
+        cells.update()
         cells.draw(screen)
+
         screen.blit(screen, (0, 0))
         pygame.display.flip()
 
