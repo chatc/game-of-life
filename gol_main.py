@@ -66,8 +66,8 @@ def set_speed(speed):
 
 def exit_events():
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE \
+           or event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(0)
 
