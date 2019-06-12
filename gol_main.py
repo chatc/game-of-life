@@ -17,6 +17,9 @@ WHITE_RGB = (255, 255, 255)
 DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
 INTERVAL = 0.5
 
+# control Flags
+PAUSE = False
+
 
 class Cells(object):
     def __init__(self):
@@ -100,8 +103,8 @@ def create_grid():
 # def create_control_panel():
 
 
-
 def deal_with_events():
+    global PAUSE
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE \
            or event.type == pygame.QUIT:
@@ -111,6 +114,10 @@ def deal_with_events():
             mouse_x, mouse_y = event.pos
             if in_rect(event.pos, (1, 1, GRID_LENGTH * CELL_PIXEL, GRID_LENGTH * CELL_PIXEL)):
                 cells.toggle_status(int((mouse_x - 1) / 5), int((mouse_y - 1) / 5))
+            if in_rect(event.pos, (GRID_LENGTH * CELL_PIXEL + 1, 1,
+                                   GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE,
+                                   GRID_LENGTH * CELL_PIXEL + 1)):
+                PAUSE = not PAUSE
 
 
 if __name__ == '__main__':
@@ -130,7 +137,7 @@ if __name__ == '__main__':
         screen.blit(grid, (0, 0))
         deal_with_events()
 
-        if cells.ready_for_refresh():
+        if not PAUSE and cells.ready_for_refresh():
             cells.update()
 
         cells.draw()
