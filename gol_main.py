@@ -1,4 +1,7 @@
 import pygame
+import itertools
+import copy
+import patterns
 
 # consts
 GRID_LENGTH = 100
@@ -7,14 +10,57 @@ CELL_PIXEL = 5
 
 # colors
 GRAY_RGB = (127, 127, 127)
+YELLOW_RGB = (255, 255, 0)
+DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+
+
+class Cells(object):
+    def __init__(self):
+        self.cells = [[0] * GRID_LENGTH for _ in GRID_LENGTH]
+
+    def draw(self, screen):
+        for x in range(GRID_LENGTH):
+            for y in range(GRID_LENGTH):
+                if self.cells[x][y] == 1:
+                    rect = [self.x * CELL_PIXEL + 1, self.y * CELL_PIXEL + 1, CELL_PIXEL - 1, CELL_PIXEL - 1]
+                    pygame.draw.rect(screen, YELLOW_RGB, rect)
+
+    def count_live_neighbours(self, x, y):
+        cnt = 0
+        for x_bias, y_bias in DIRECTIONS:
+            cnt += self.cells[x + x_bias][y + y_bias]
+        return cnt
+
+    def get_next(self):
+        new_cells = [[0] * GRID_LENGTH for _ in GRID_LENGTH]
+        for x in range(GRID_LENGTH):
+            for y in range(GRID_LENGTH):
+                cnt = self.count_live_neighbours(x, y)
+                if cnt == 2:
+                    new_cells[x][y] = self.cells[x][y]
+                elif cnt == 3:
+                    new_cells[x][y] = 1
+                else:
+                    new_cells[x][y] = 0
+        self.cells = new_cells
+
+    def load_pattern(self, pattern):
+        pos_x, pos_y = (GRID_LENGTH//2 - len(pattern)//2, GRID_LENGTH//2 - len(pattern)//2)
+        for i in range(len(pattern)):
+            for j in range(len(pattern[0])):
+                self.cells[i + pos_x][j + pos_y] = 1
 
 
 def create_grid():
     grid_shape = (GRID_LENGTH * CELL_PIXEL + 1, GRID_LENGTH * CELL_PIXEL + 1)
-    grid = pygame.Surface(grid_shape)
-    grid = grid.convert()
-    grid.fill(GRAY_RGB)
-    return grid
+    new_grid = pygame.Surface(grid_shape)
+    new_grid = new_grid.convert()
+    new_grid.fill(GRAY_RGB)
+    return new_grid
+
+
+def set_speed(speed):
+    clock.tick(speed)
 
 
 if __name__ == '__main__':
@@ -26,6 +72,11 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
 
     grid = create_grid()
+    pattern = patterns.TEST
+    cells = Cells()
+    cells.load_pattern(pattern)
 
     while 1:
         screen.blit(grid, (0, 0))
+
+
