@@ -13,12 +13,13 @@ CELL_PIXEL = 5
 GRAY_RGB = (127, 127, 127)
 YELLOW_RGB = (255, 255, 0)
 WHITE_RGB = (255, 255, 255)
+AZURE_RGB = (137, 190, 178)
 
 DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
-INTERVAL = 1
 
 # control Flags
 PAUSE = False
+INTERVAL = 0.8
 
 
 class Cells(object):
@@ -72,31 +73,6 @@ class Cells(object):
         self.last_refresh = time.time()
 
 
-class Button(object):
-    def __init__(self, upimage, downimage, position):
-        self.imageUp = pygame.image.load(upimage).convert_alpha()
-        self.imageDown = pygame.image.load(downimage).convert_alpha()
-        self.position = position
-
-    def isOver(self):
-        point_x, point_y = pygame.mouse.get_pos()
-        x, y = self.position
-        w, h = self.imageUp.get_size()
-
-        in_x = x - w / 2 < point_x < x + w / 2
-        in_y = y - h / 2 < point_y < y + h / 2
-        return in_x and in_y
-
-    def render(self):
-        w, h = self.imageUp.get_size()
-        x, y = self.position
-
-        if self.isOver():
-            screen.blit(self.imageDown, (x - w / 2, y - h / 2))
-        else:
-            screen.blit(self.imageUp, (x - w / 2, y - h / 2))
-
-
 def create_grid():
     grid_shape = (GRID_LENGTH * CELL_PIXEL + 1, GRID_LENGTH * CELL_PIXEL + 1)
     new_grid = pygame.Surface(grid_shape)
@@ -105,7 +81,19 @@ def create_grid():
     return new_grid
 
 
-# def create_control_panel():
+def create_control_panel():
+    start_x = GRID_LENGTH * CELL_PIXEL + 1
+    start_y = 1
+    return Buttons([Button('icons/beginning_48px_1153816_easyicon.net.ico',
+                   (start_x + 50, start_y + 50)),
+            Button('icons/music_fastforward_button_48px_1182964_easyicon.net.png',
+                   (start_x + 100, start_y + 50)),
+            Button('icons/music_rewind_button_48px_1182982_easyicon.net.png',
+                   (start_x + 150, start_y + 50)),
+            Button('icons/arrows_circle_remove_48px_1182472_easyicon.net.png',
+                   (start_x + 200, start_y + 50))
+            ],
+            ['start_pause', 'speed_up', 'slown_down', 'clear'])
 
 
 def deal_with_events():
@@ -115,6 +103,7 @@ def deal_with_events():
            or event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(0)
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
             if in_rect(event.pos, (1, 1, GRID_LENGTH * CELL_PIXEL, GRID_LENGTH * CELL_PIXEL)):
@@ -122,13 +111,21 @@ def deal_with_events():
             if in_rect(event.pos, (GRID_LENGTH * CELL_PIXEL + 1, 1,
                                    GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE,
                                    GRID_LENGTH * CELL_PIXEL + 1)):
+                if buttons.get_button_by_id(0).isOver():
+                    PAUSE = not PAUSE
+                if buttons.get_button_by_id(1).isOver():
+                    if INTERVAL <= 15:
+                        INTERVAL *= 2
+                if buttons.get_button_by_id(2).isOver():
+                    if INTERVAL >= 0.01:
+                        INTERVAL /= 2
+                if buttons.get_button_by_id(3).isOver():
+                    cells.clear()
                 # PAUSE = not PAUSE # pause and start
                 # if INTERVAL >= 0.1: INTERVAL /= 2  # speed up
                 # if INTERVAL <= 100: INTERVAL *= 2  # slow down
                 # cells.clear()  # clear screen
-                cells.load_pattern(patterns.GLIDER)  # load pattern
-
-
+                # cells.load_pattern(patterns.GLIDER)  # load pattern
 
 
 if __name__ == '__main__':
@@ -137,15 +134,18 @@ if __name__ == '__main__':
     pygame.display.set_caption('Game of Life')
     window_shape = (GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE, GRID_LENGTH * CELL_PIXEL + 1)
     screen = pygame.display.set_mode(window_shape)
+    screen.fill(AZURE_RGB)
     clock = pygame.time.Clock()
-
+    # draw different parts
     grid = create_grid()
+    buttons = create_control_panel()
     cells = Cells()
     cells.load_pattern(patterns.GLIDER)
 
     while True:
         clock.tick(0)
         screen.blit(grid, (0, 0))
+        buttons.render(screen)
         deal_with_events()
 
         if not PAUSE and cells.ready_for_refresh():
