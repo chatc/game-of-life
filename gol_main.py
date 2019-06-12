@@ -51,6 +51,9 @@ class Cells(object):
             for j in range(len(pattern[0])):
                 self.cells[i + pos_x][j + pos_y] = pattern[i][j]
 
+    def toggle_status(self, x, y):
+        self.cells[x][y] = int(not self.cells[x][y])
+
 
 def create_grid():
     grid_shape = (GRID_LENGTH * CELL_PIXEL + 1, GRID_LENGTH * CELL_PIXEL + 1)
@@ -64,12 +67,24 @@ def set_speed(speed):
     clock.tick(speed)
 
 
-def exit_events():
+def deal_with_events():
+    mouse_activate = False
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE \
            or event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(0)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_activate = True
+        if event.type == pygame.MOUSEBUTTONUP:
+            mouse_activate = False
+        if event.type == pygame.MOUSEMOTION:
+            if mouse_activate:
+                mouse_x, mouse_y = event.pos
+                if mouse_x - 1 > 0 and mouse_y - 1 > 0:
+                    cells.toggle_status(int((mouse_x - 1)/5), int((mouse_y - 1)/5))
+
+
 
 
 if __name__ == '__main__':
@@ -83,13 +98,12 @@ if __name__ == '__main__':
     grid = create_grid()
     cells = Cells()
     cells.load_pattern(patterns.GLIDER)
-
     while 1:
-        set_speed(10)
+        set_speed(1)
         screen.blit(grid, (0, 0))
         cells.update()
 
-        exit_events()
+        deal_with_events()
 
         screen.blit(grid, (0, 0))
         cells.draw(screen)
