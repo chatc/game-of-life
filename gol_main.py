@@ -14,11 +14,13 @@ GRAY_RGB = (127, 127, 127)
 YELLOW_RGB = (255, 255, 0)
 
 DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+INTERVAL = 0.2
 
 
 class Cells(object):
     def __init__(self):
         self.cells = [[0] * GRID_LENGTH for _ in range(GRID_LENGTH)]
+        self.last_refresh = time.time()
 
     def draw(self, screen):
         for x in range(GRID_LENGTH):
@@ -45,15 +47,20 @@ class Cells(object):
                 elif cnt == 3:
                     new_cells[x][y] = 1
         self.cells = new_cells
+        self. last_refresh = time.time()
 
     def load_pattern(self, pattern):
         pos_x, pos_y = (GRID_LENGTH//2 - len(pattern)//2, GRID_LENGTH//2 - len(pattern)//2)
         for i in range(len(pattern)):
             for j in range(len(pattern[0])):
                 self.cells[i + pos_x][j + pos_y] = pattern[i][j]
+        self.last_refresh = time.time()
 
     def toggle_status(self, x, y):
         self.cells[x][y] = int(not self.cells[x][y])
+
+    def ready_for_refresh(self):
+        return time.time() - self.last_refresh > INTERVAL
 
 
 def create_grid():
@@ -62,10 +69,6 @@ def create_grid():
     new_grid = new_grid.convert()
     new_grid.fill(GRAY_RGB)
     return new_grid
-
-
-def set_speed(speed):
-    clock.tick(speed)
 
 
 def deal_with_events():
@@ -86,7 +89,6 @@ def deal_with_events():
                     cells.toggle_status(int((mouse_x - 1)/5), int((mouse_y - 1)/5))
 
 
-
 if __name__ == '__main__':
     # setting screen
     pygame.init()
@@ -98,14 +100,16 @@ if __name__ == '__main__':
     grid = create_grid()
     cells = Cells()
     cells.load_pattern(patterns.GLIDER)
+
     while 1:
-        set_speed(0)
+        clock.tick(0)
         screen.blit(grid, (0, 0))
         deal_with_events()
 
-        cells.update()
-        cells.draw(screen)
+        if cells.ready_for_refresh():
+            cells.update()
 
+        cells.draw(screen)
         screen.blit(screen, (0, 0))
         pygame.display.flip()
 
