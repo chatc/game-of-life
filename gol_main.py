@@ -1,5 +1,5 @@
 import pygame
-import itertools
+import sys
 import copy
 import patterns
 
@@ -64,6 +64,14 @@ def set_speed(speed):
     clock.tick(speed)
 
 
+def exit_events():
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit(0)
+
+
 if __name__ == '__main__':
     # setting screen
     pygame.init()
@@ -80,6 +88,8 @@ if __name__ == '__main__':
         set_speed(10)
         screen.blit(grid, (0, 0))
         cells.update()
+
+        exit_events()
 
         screen.blit(grid, (0, 0))
         cells.draw(screen)
