@@ -11,6 +11,7 @@ CELL_PIXEL = 5
 # colors
 GRAY_RGB = (127, 127, 127)
 YELLOW_RGB = (255, 255, 0)
+
 DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
 
 
@@ -42,15 +43,13 @@ class Cells(object):
                     new_cells[x][y] = self.cells[x][y]
                 elif cnt == 3:
                     new_cells[x][y] = 1
-                else:
-                    new_cells[x][y] = 0
         self.cells = new_cells
 
     def load_pattern(self, pattern):
         pos_x, pos_y = (GRID_LENGTH//2 - len(pattern)//2, GRID_LENGTH//2 - len(pattern)//2)
         for i in range(len(pattern)):
             for j in range(len(pattern[0])):
-                self.cells[i + pos_x][j + pos_y] = 1
+                self.cells[i + pos_x][j + pos_y] = pattern[i][j]
 
 
 def create_grid():
@@ -75,7 +74,7 @@ if __name__ == '__main__':
 
     grid = create_grid()
     cells = Cells()
-    cells.load_pattern(patterns.TEST)
+    cells.load_pattern(patterns.GLIDER)
 
     while 1:
         set_speed(10)
