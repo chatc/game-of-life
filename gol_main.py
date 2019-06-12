@@ -12,9 +12,10 @@ CELL_PIXEL = 5
 # colors
 GRAY_RGB = (127, 127, 127)
 YELLOW_RGB = (255, 255, 0)
+WHITE_RGB = (255, 255, 255)
 
 DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
-INTERVAL = 0.2
+INTERVAL = 0.5
 
 
 class Cells(object):
@@ -22,7 +23,7 @@ class Cells(object):
         self.cells = [[0] * GRID_LENGTH for _ in range(GRID_LENGTH)]
         self.last_refresh = time.time()
 
-    def draw(self, screen):
+    def draw(self):
         for x in range(GRID_LENGTH):
             for y in range(GRID_LENGTH):
                 if self.cells[x][y] == 1:
@@ -63,6 +64,31 @@ class Cells(object):
         return time.time() - self.last_refresh > INTERVAL
 
 
+class Button(object):
+    def __init__(self, upimage, downimage, position):
+        self.imageUp = pygame.image.load(upimage).convert_alpha()
+        self.imageDown = pygame.image.load(downimage).convert_alpha()
+        self.position = position
+
+    def isOver(self):
+        point_x, point_y = pygame.mouse.get_pos()
+        x, y = self.position
+        w, h = self.imageUp.get_size()
+
+        in_x = x - w / 2 < point_x < x + w / 2
+        in_y = y - h / 2 < point_y < y + h / 2
+        return in_x and in_y
+
+    def render(self):
+        w, h = self.imageUp.get_size()
+        x, y = self.position
+
+        if self.isOver():
+            screen.blit(self.imageDown, (x - w / 2, y - h / 2))
+        else:
+            screen.blit(self.imageUp, (x - w / 2, y - h / 2))
+
+
 def create_grid():
     grid_shape = (GRID_LENGTH * CELL_PIXEL + 1, GRID_LENGTH * CELL_PIXEL + 1)
     new_grid = pygame.Surface(grid_shape)
@@ -71,22 +97,20 @@ def create_grid():
     return new_grid
 
 
+# def create_control_panel():
+
+
+
 def deal_with_events():
-    mouse_activate = False
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE \
            or event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(0)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_activate = True
-        if event.type == pygame.MOUSEBUTTONUP:
-            mouse_activate = False
-        if event.type == pygame.MOUSEMOTION:
-            if mouse_activate:
-                mouse_x, mouse_y = event.pos
-                if in_rect(event.pos, (1, 1, GRID_LENGTH * CELL_PIXEL, GRID_LENGTH * CELL_PIXEL)):
-                    cells.toggle_status(int((mouse_x - 1)/5), int((mouse_y - 1)/5))
+            mouse_x, mouse_y = event.pos
+            if in_rect(event.pos, (1, 1, GRID_LENGTH * CELL_PIXEL, GRID_LENGTH * CELL_PIXEL)):
+                cells.toggle_status(int((mouse_x - 1) / 5), int((mouse_y - 1) / 5))
 
 
 if __name__ == '__main__':
@@ -101,7 +125,7 @@ if __name__ == '__main__':
     cells = Cells()
     cells.load_pattern(patterns.GLIDER)
 
-    while 1:
+    while True:
         clock.tick(0)
         screen.blit(grid, (0, 0))
         deal_with_events()
@@ -109,7 +133,7 @@ if __name__ == '__main__':
         if cells.ready_for_refresh():
             cells.update()
 
-        cells.draw(screen)
+        cells.draw()
         screen.blit(screen, (0, 0))
         pygame.display.flip()
 
