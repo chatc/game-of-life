@@ -1,4 +1,5 @@
 import pygame
+import random
 import sys
 import time
 import patterns
@@ -86,14 +87,16 @@ def create_control_panel():
     start_y = 1
     return Buttons([Button('icons/beginning_48px_1153816_easyicon.net.ico',
                    (start_x + 50, start_y + 50)),
-            Button('icons/music_fastforward_button_48px_1182964_easyicon.net.png',
-                   (start_x + 100, start_y + 50)),
             Button('icons/music_rewind_button_48px_1182982_easyicon.net.png',
+                   (start_x + 100, start_y + 50)),
+            Button('icons/music_fastforward_button_48px_1182964_easyicon.net.png',
                    (start_x + 150, start_y + 50)),
             Button('icons/arrows_circle_remove_48px_1182472_easyicon.net.png',
-                   (start_x + 200, start_y + 50))
+                   (start_x + 200, start_y + 50)),
+            Button('icons/magic_64px_1150582_easyicon.net.png',
+                   (start_x + 130, start_y + 200)),
             ],
-            ['start_pause', 'speed_up', 'slown_down', 'clear'])
+            ['start_pause', 'speed_up', 'slown_down', 'clear', 'load'])
 
 
 def deal_with_events():
@@ -121,11 +124,9 @@ def deal_with_events():
                         INTERVAL /= 2
                 if buttons.get_button_by_id(3).isOver():
                     cells.clear()
-                # PAUSE = not PAUSE # pause and start
-                # if INTERVAL >= 0.1: INTERVAL /= 2  # speed up
-                # if INTERVAL <= 100: INTERVAL *= 2  # slow down
-                # cells.clear()  # clear screen
-                # cells.load_pattern(patterns.GLIDER)  # load pattern
+                if buttons.get_button_by_id(4).isOver():
+                    cells.load_pattern(patterns.pattern_dic[patterns.cur_patterns])
+                    patterns.cur_patterns = (patterns.cur_patterns + 1) % len(patterns.pattern_dic)
 
 
 if __name__ == '__main__':
@@ -140,7 +141,9 @@ if __name__ == '__main__':
     grid = create_grid()
     buttons = create_control_panel()
     cells = Cells()
-    cells.load_pattern(patterns.GLIDER)
+    # load pattern
+    cells.load_pattern(patterns.pattern_dic[patterns.cur_patterns])
+    patterns.cur_patterns = (patterns.cur_patterns + 1) % len(patterns.pattern_dic)
 
     while True:
         clock.tick(0)
