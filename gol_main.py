@@ -74,11 +74,11 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
 
     grid = create_grid()
-    pattern = patterns.TEST
     cells = Cells()
-    cells.load_pattern(pattern)
+    cells.load_pattern(patterns.TEST)
 
     while 1:
+        set_speed(10)
         screen.blit(grid, (0, 0))
         cells.update()
 
