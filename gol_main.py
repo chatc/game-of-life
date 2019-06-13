@@ -7,11 +7,12 @@ from utils import *
 
 # consts
 GRID_LENGTH = 100
-CONTROL_PANEL_SIZE = 250
+CONTROL_PANEL_SIZE = 100
 CELL_PIXEL = 5
 
 # colors
 GRAY_RGB = (127, 127, 127)
+BLACK_RGB = (0, 0, 0)
 YELLOW_RGB = (255, 255, 0)
 WHITE_RGB = (255, 255, 255)
 AZURE_RGB = (137, 190, 178)
@@ -60,7 +61,7 @@ class Cells(object):
         pos_x, pos_y = (GRID_LENGTH//2 - len(pattern)//2, GRID_LENGTH//2 - len(pattern)//2)
         for i in range(len(pattern)):
             for j in range(len(pattern[0])):
-                self.cells[i + pos_x][j + pos_y] = pattern[i][j]
+                self.cells[j + pos_y][i + pos_x] = pattern[i][j]
         self.last_refresh = time.time()
 
     def toggle_status(self, x, y):
@@ -78,7 +79,7 @@ def create_grid():
     grid_shape = (GRID_LENGTH * CELL_PIXEL + 1, GRID_LENGTH * CELL_PIXEL + 1)
     new_grid = pygame.Surface(grid_shape)
     new_grid = new_grid.convert()
-    new_grid.fill(GRAY_RGB)
+    new_grid.fill(BLACK_RGB)
     return new_grid
 
 
@@ -88,13 +89,13 @@ def create_control_panel():
     return Buttons([Button('icons/beginning_48px_1153816_easyicon.net.ico',
                    (start_x + 50, start_y + 50)),
             Button('icons/music_rewind_button_48px_1182982_easyicon.net.png',
-                   (start_x + 100, start_y + 50)),
+                   (start_x + 50, start_y + 100)),
             Button('icons/music_fastforward_button_48px_1182964_easyicon.net.png',
-                   (start_x + 150, start_y + 50)),
+                   (start_x + 50, start_y + 150)),
             Button('icons/arrows_circle_remove_48px_1182472_easyicon.net.png',
-                   (start_x + 200, start_y + 50)),
+                   (start_x + 50, start_y + 200)),
             Button('icons/magic_64px_1150582_easyicon.net.png',
-                   (start_x + 130, start_y + 200)),
+                   (start_x + 50, start_y + 300)),
             ],
             ['start_pause', 'speed_up', 'slown_down', 'clear', 'load'])
 
@@ -125,8 +126,11 @@ def deal_with_events():
                 if buttons.get_button_by_id(3).isOver():
                     cells.clear()
                 if buttons.get_button_by_id(4).isOver():
+                    history_pause = PAUSE
+                    PAUSE = True
                     cells.load_pattern(patterns.pattern_dic[patterns.cur_patterns])
                     patterns.cur_patterns = (patterns.cur_patterns + 1) % len(patterns.pattern_dic)
+                    PAUSE = history_pause
 
 
 if __name__ == '__main__':
@@ -135,18 +139,20 @@ if __name__ == '__main__':
     pygame.display.set_caption('Game of Life')
     window_shape = (GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE, GRID_LENGTH * CELL_PIXEL + 1)
     screen = pygame.display.set_mode(window_shape)
-    screen.fill(AZURE_RGB)
+    screen.fill(GRAY_RGB)
     clock = pygame.time.Clock()
+
     # draw different parts
     grid = create_grid()
     buttons = create_control_panel()
     cells = Cells()
+
     # load pattern
     cells.load_pattern(patterns.pattern_dic[patterns.cur_patterns])
     patterns.cur_patterns = (patterns.cur_patterns + 1) % len(patterns.pattern_dic)
 
     while True:
-        clock.tick(0)
+        clock.tick(100)
         screen.blit(grid, (0, 0))
         buttons.render(screen)
         deal_with_events()
