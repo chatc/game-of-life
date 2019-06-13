@@ -4,24 +4,7 @@ import sys
 import time
 import patterns
 from utils import *
-
-# consts
-GRID_LENGTH = 100
-CONTROL_PANEL_SIZE = 100
-CELL_PIXEL = 5
-
-# colors
-GRAY_RGB = (127, 127, 127)
-BLACK_RGB = (0, 0, 0)
-YELLOW_RGB = (255, 255, 0)
-WHITE_RGB = (255, 255, 255)
-AZURE_RGB = (137, 190, 178)
-
-DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
-
-# control Flags
-PAUSE = False
-INTERVAL = 0.8
+from parameters import *
 
 
 class Cells(object):
@@ -86,18 +69,27 @@ def create_grid():
 def create_control_panel():
     start_x = GRID_LENGTH * CELL_PIXEL + 1
     start_y = 1
-    return Buttons([Button('icons/beginning_48px_1153816_easyicon.net.ico',
-                   (start_x + 50, start_y + 50)),
-            Button('icons/music_rewind_button_48px_1182982_easyicon.net.png',
-                   (start_x + 50, start_y + 100)),
-            Button('icons/music_fastforward_button_48px_1182964_easyicon.net.png',
-                   (start_x + 50, start_y + 150)),
-            Button('icons/arrows_circle_remove_48px_1182472_easyicon.net.png',
-                   (start_x + 50, start_y + 200)),
-            Button('icons/magic_64px_1150582_easyicon.net.png',
-                   (start_x + 50, start_y + 300)),
-            ],
-            ['start_pause', 'speed_up', 'slown_down', 'clear', 'load'])
+    button_play = [Button('icons/music_play_button_48px_1182975_easyicon.net.png',
+                          'icons/music_play_button_48px_1182975_easyicon.net.png',
+                          (start_x + 50, start_y + 50)),
+                   Button('icons/music_pause_button_48px_1182974_easyicon.net.png',
+                          'icons/music_pause_button_48px_1182974_easyicon.net.png',
+                          (start_x + 50, start_y + 50))]
+    return Buttons([button_play,
+                    Button('icons/music_rewind_button_48px_1182982_easyicon.net - chn.png',
+                           'icons/music_rewind_button_48px_1182982_easyicon.net.png',
+                           (start_x + 50, start_y + 100)),
+                    Button('icons/music_fastforward_button_48px_1182964_easyicon.net - chn.png',
+                           'icons/music_fastforward_button_48px_1182964_easyicon.net.png',
+                           (start_x + 50, start_y + 150)),
+                    Button('icons/arrows_circle_remove_48px_1182472_easyicon.net - chn.png',
+                           'icons/arrows_circle_remove_48px_1182472_easyicon.net.png',
+                           (start_x + 50, start_y + 200)),
+                    Button('icons/magic_64px_1150582_easyicon.net - chn.png',
+                           'icons/magic_64px_1150582_easyicon.net.png',
+                           (start_x + 50, start_y + 300)),
+                    ],
+                    ['start_pause', 'speed_up', 'slown_down', 'clear', 'load'])
 
 
 def deal_with_events():
@@ -115,17 +107,17 @@ def deal_with_events():
             if in_rect(event.pos, (GRID_LENGTH * CELL_PIXEL + 1, 1,
                                    GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE,
                                    GRID_LENGTH * CELL_PIXEL + 1)):
-                if buttons.get_button_by_id(0).isOver():
+                if buttons.get_button_by_id(0).is_over():
                     PAUSE = not PAUSE
-                if buttons.get_button_by_id(1).isOver():
+                if buttons.get_button_by_id(1).is_over():
                     if INTERVAL <= 15:
                         INTERVAL *= 2
-                if buttons.get_button_by_id(2).isOver():
+                if buttons.get_button_by_id(2).is_over():
                     if INTERVAL >= 0.01:
                         INTERVAL /= 2
-                if buttons.get_button_by_id(3).isOver():
+                if buttons.get_button_by_id(3).is_over():
                     cells.clear()
-                if buttons.get_button_by_id(4).isOver():
+                if buttons.get_button_by_id(4).is_over():
                     history_pause = PAUSE
                     PAUSE = True
                     cells.load_pattern(patterns.pattern_dic[patterns.cur_patterns])
@@ -139,7 +131,6 @@ if __name__ == '__main__':
     pygame.display.set_caption('Game of Life')
     window_shape = (GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE, GRID_LENGTH * CELL_PIXEL + 1)
     screen = pygame.display.set_mode(window_shape)
-    screen.fill(GRAY_RGB)
     clock = pygame.time.Clock()
 
     # draw different parts
@@ -153,6 +144,7 @@ if __name__ == '__main__':
 
     while True:
         clock.tick(100)
+        screen.fill(GRAY_RGB)
         screen.blit(grid, (0, 0))
         buttons.render(screen)
         deal_with_events()

@@ -1,5 +1,5 @@
 import pygame
-
+from parameters import *
 
 def in_rect(pos, rect):
     x, y = pos
@@ -10,11 +10,12 @@ def in_rect(pos, rect):
 
 
 class Button(object):
-    def __init__(self, upimage, position):
-        self.imageUp = pygame.image.load(upimage).convert_alpha()
+    def __init__(self, up_image, down_image, position):
+        self.imageUp = pygame.image.load(up_image).convert_alpha()
+        self.imageDown = pygame.image.load(down_image).convert_alpha()
         self.position = position
 
-    def isOver(self):
+    def is_over(self):
         point_x, point_y = pygame.mouse.get_pos()
         x, y = self.position
         w, h = self.imageUp.get_size()
@@ -27,7 +28,10 @@ class Button(object):
         w, h = self.imageUp.get_size()
         x, y = self.position
 
-        screen.blit(self.imageUp, (x - w / 2, y - h / 2))
+        if self.is_over():
+            screen.blit(self.imageUp, (x - w / 2, y - h / 2))
+        else:
+            screen.blit(self.imageDown, (x - w / 2, y - h / 2))
 
 
 class Buttons(object):
