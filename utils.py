@@ -1,5 +1,5 @@
 import pygame
-from parameters import *
+
 
 def in_rect(pos, rect):
     x, y = pos

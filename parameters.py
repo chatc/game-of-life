@@ -12,6 +12,4 @@ AZURE_RGB = (137, 190, 178)
 
 DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
 
-# control Flags
-PAUSE = False
-INTERVAL = 0.8
+

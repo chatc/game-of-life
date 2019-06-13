@@ -46,7 +46,7 @@ class Cells(object):
     def toggle_status(self, x, y):
         self.cells[x][y] = int(not self.cells[x][y])
 
-    def ready_for_refresh(self):
+    def ready_for_refresh(self, INTERVAL):
         return time.time() - self.last_refresh > INTERVAL
 
     def clear(self):

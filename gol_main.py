@@ -4,6 +4,10 @@ import patterns
 from utils import *
 from cell_core import *
 
+# control Flags
+PAUSE = False
+INTERVAL = 0.8
+
 
 def create_grid():
     grid_shape = (GRID_LENGTH * CELL_PIXEL + 1, GRID_LENGTH * CELL_PIXEL + 1)
@@ -93,7 +97,7 @@ if __name__ == '__main__':
         buttons.render(screen)
         deal_with_events()
 
-        if not PAUSE and cells.ready_for_refresh():
+        if not PAUSE and cells.ready_for_refresh(INTERVAL):
             cells.update()
 
         cells.draw(screen)
