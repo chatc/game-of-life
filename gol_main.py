@@ -41,7 +41,7 @@ class Cells(object):
 
     def load_pattern(self, pattern):
         self.clear()
-        pos_x, pos_y = (GRID_LENGTH//2 - len(pattern)//2, GRID_LENGTH//2 - len(pattern)//2)
+        pos_x, pos_y = (GRID_LENGTH//2 - len(pattern)//2, GRID_LENGTH//2 - len(pattern[0])//2)
         for i in range(len(pattern)):
             for j in range(len(pattern[0])):
                 self.cells[j + pos_y][i + pos_x] = pattern[i][j]
