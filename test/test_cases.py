@@ -1,3 +1,4 @@
+from parameters import *
 # Spaceships
 GLIDER = [
     [0, 1, 0],
@@ -46,5 +47,4 @@ GOSPERGLIDERGUN = [
         [0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ]
 
-cur_patterns = 0
-pattern_dic = [GLIDER, BLINKER, R_PENTOMINO, TEST, TENCELLROW, GOSPERGLIDERGUN]
+FULL_TEST = [[1]*GRID_LENGTH for _ in range(GRID_LENGTH)]
