@@ -69,13 +69,10 @@ def create_grid():
 def create_control_panel():
     start_x = GRID_LENGTH * CELL_PIXEL + 1
     start_y = 1
-    button_play = [Button('icons/music_play_button_48px_1182975_easyicon.net.png',
-                          'icons/music_play_button_48px_1182975_easyicon.net.png',
+
+    return Buttons([Button('icons/skip_to_start_48px_1169504_easyicon.net - chn.png',
+                           'icons/skip_to_start_48px_1169504_easyicon.net.png',
                           (start_x + 50, start_y + 50)),
-                   Button('icons/music_pause_button_48px_1182974_easyicon.net.png',
-                          'icons/music_pause_button_48px_1182974_easyicon.net.png',
-                          (start_x + 50, start_y + 50))]
-    return Buttons([button_play,
                     Button('icons/music_rewind_button_48px_1182982_easyicon.net - chn.png',
                            'icons/music_rewind_button_48px_1182982_easyicon.net.png',
                            (start_x + 50, start_y + 100)),
