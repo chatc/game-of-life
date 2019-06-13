@@ -33,6 +33,22 @@ TEST = [
 ]
 
 
+# FULLALIVE
+FULLALIVE = [[1 for i in range(GRID_LENGTH)] for i in range(GRID_LENGTH)]
+
+# EDGE
+first = [1 for i in range(GRID_LENGTH)]
+middle = [1] + [0 for i in range(GRID_LENGTH - 2)] + [1]
+EDGE = []
+for i in range(GRID_LENGTH):
+    if i == 0 or i == GRID_LENGTH - 1:
+        EDGE.append(first)
+    else:
+        EDGE.append(middle)
+
+# ONEHIGHRT
+ONEHIGHRT = [[1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,0,1,1,1,1,1]]
+
 TENCELLROW = [[1]*10]
 
 GOSPERGLIDERGUN = [
@@ -45,6 +61,13 @@ GOSPERGLIDERGUN = [
         [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+]
+
+# STILL_BOAT
+STILL_BOAT = [
+        [0, 1, 1, 0],
+        [1, 0, 0, 1],
+        [0, 1, 1, 0],
 ]
 
 FULL_TEST = [[1]*GRID_LENGTH for _ in range(GRID_LENGTH)]

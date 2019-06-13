@@ -1,3 +1,5 @@
+import parameters
+
 # Spaceships
 GLIDER = [
     [0, 1, 0],
@@ -15,7 +17,8 @@ R_PENTOMINO = [
     [0, 1, 0]
 ]
 
-TEST = [
+# PULSAR
+PULSAR = [
     [0,0,1,1,1,0,0,0,1,1,1,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0],
     [1,0,0,0,0,1,0,1,0,0,0,0,1],
@@ -31,9 +34,10 @@ TEST = [
     [0,0,1,1,1,0,0,0,1,1,1,0,0]
 ]
 
-
+# TENCELLROW
 TENCELLROW = [[1]*10]
 
+# GOSPERGLIDERGUN
 GOSPERGLIDERGUN = [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],
@@ -43,8 +47,21 @@ GOSPERGLIDERGUN = [
         [1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        [0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 ]
 
+# EDGE
+first = [1 for i in range(parameters.GRID_LENGTH)]
+middle = [1] + [0 for i in range(parameters.GRID_LENGTH - 2)] + [1]
+EDGE = []
+for i in range(parameters.GRID_LENGTH):
+    if i == 0 or i == parameters.GRID_LENGTH - 1:
+        EDGE.append(first)
+    else:
+        EDGE.append(middle)
+
+# ONEHIGHRT
+ONEHIGHRT = [[1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,0,1,1,1,1,1]]
+
 cur_patterns = 0
-pattern_dic = [GLIDER, BLINKER, R_PENTOMINO, TEST, TENCELLROW, GOSPERGLIDERGUN]
+pattern_dic = [GLIDER, BLINKER, R_PENTOMINO, PULSAR, TENCELLROW, GOSPERGLIDERGUN, EDGE, ONEHIGHRT]
