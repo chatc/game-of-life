@@ -36,7 +36,7 @@ class Cells(object):
                 elif cnt == 3:
                     new_cells[x][y] = 1
         self.cells = new_cells
-        self. last_refresh = time.time()
+        self.last_refresh = time.time()
 
     def load_pattern(self, pattern):
         self.clear()
@@ -55,3 +55,11 @@ class Cells(object):
     def clear(self):
         self.cells = [[0] * GRID_LENGTH for _ in range(GRID_LENGTH)]
         self.last_refresh = time.time()
+
+    def unit_test(self, rounds):
+        for _ in range(rounds):
+            for row in self.cells:
+                row_str = ''.join([str(y) for y in row])
+                print(row_str)
+            print("#"*60)
+            self.update()
