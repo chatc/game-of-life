@@ -13,11 +13,10 @@ class Cells(object):
         for x in range(GRID_LENGTH):
             for y in range(GRID_LENGTH):
                 if self.cells[x][y] == 1:
-                    load_pic = 'icons/cells/cell_' + str(random.randint(0,3)) + '.png'
-                    imageUp = pygame.image.load(load_pic).convert_alpha()
-                    imageUp = pygame.transform.scale(imageUp,
-                                                     (CELL_PIXEL - 1, CELL_PIXEL - 1))
-                    screen.blit(imageUp, (x * CELL_PIXEL + 1, y * CELL_PIXEL + 1))
+                    load_pic = 'icons/cells/cell_' + str(random.randint(0, CELL_PIC)) + '.png'
+                    image = pygame.image.load(load_pic).convert_alpha()
+                    image = pygame.transform.scale(image, (CELL_PIXEL - 1, CELL_PIXEL - 1))
+                    screen.blit(image, (x * CELL_PIXEL + 1, y * CELL_PIXEL + 1))
 
     def count_live_neighbours(self, x, y):
         cnt = 0
