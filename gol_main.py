@@ -51,7 +51,8 @@ def deal_with_events():
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
             if in_rect(event.pos, (1, 1, GRID_LENGTH * CELL_PIXEL, GRID_LENGTH * CELL_PIXEL)):
-                cells.toggle_status(int((mouse_x - 1) / 5), int((mouse_y - 1) / 5))
+                cells.toggle_status(int((mouse_x - 1) / CELL_PIXEL),
+                                    int((mouse_y - CELL_PIXEL) / CELL_PIXEL))
             if in_rect(event.pos, (GRID_LENGTH * CELL_PIXEL + 1, 1,
                                    GRID_LENGTH * CELL_PIXEL + 1 + CONTROL_PANEL_SIZE,
                                    GRID_LENGTH * CELL_PIXEL + 1)):

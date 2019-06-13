@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 from parameters import *
 
 
@@ -12,8 +13,11 @@ class Cells(object):
         for x in range(GRID_LENGTH):
             for y in range(GRID_LENGTH):
                 if self.cells[x][y] == 1:
-                    rect = [x * CELL_PIXEL + 1, y * CELL_PIXEL + 1, CELL_PIXEL - 1, CELL_PIXEL - 1]
-                    pygame.draw.rect(screen, YELLOW_RGB, rect)
+                    load_pic = 'icons/cells/cell_' + str(random.randint(0,3)) + '.png'
+                    imageUp = pygame.image.load(load_pic).convert_alpha()
+                    imageUp = pygame.transform.scale(imageUp,
+                                                     (CELL_PIXEL - 1, CELL_PIXEL - 1))
+                    screen.blit(imageUp, (x * CELL_PIXEL + 1, y * CELL_PIXEL + 1))
 
     def count_live_neighbours(self, x, y):
         cnt = 0
@@ -46,8 +50,8 @@ class Cells(object):
     def toggle_status(self, x, y):
         self.cells[x][y] = int(not self.cells[x][y])
 
-    def ready_for_refresh(self, INTERVAL):
-        return time.time() - self.last_refresh > INTERVAL
+    def ready_for_refresh(self, interval):
+        return time.time() - self.last_refresh > interval
 
     def clear(self):
         self.cells = [[0] * GRID_LENGTH for _ in range(GRID_LENGTH)]
