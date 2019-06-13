@@ -25,5 +25,7 @@ TEST = [[0,0,1,1,1,0,0,0,1,1,1,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,1,1,1,0,0,0,1,1,1,0,0]]
 
+TENCELLROW = [[1]*10]
+
 cur_patterns = 0
-pattern_dic = [GLIDER, BLINKER, R_PENTOMINO, TEST]
+pattern_dic = [GLIDER, BLINKER, R_PENTOMINO, TEST, TENCELLROW]
