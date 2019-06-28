@@ -4,6 +4,7 @@ import os
 import utils
 import sys
 
+
 class Dataset(object):
     def __init__(self):
         self.data_path = DATA_PATH
