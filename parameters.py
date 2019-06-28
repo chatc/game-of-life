@@ -5,7 +5,7 @@ GRID_LENGTH = 3
 CONTROL_PANEL_SIZE = 100
 CELL_PIXEL = 260
 CELL_PIC = 5
-DATA_PATH = "D:\\office\\data\\CASIA-WebFace_160\\"
+DATA_PATH = "D:\\Users\\ASUS\\CASIA-WebFace_160\\"
 INDEX_PATH = "rsc\\new_index.json"
 SAVE_INDEX_PATH = "rsc\\new_index.json"
 
