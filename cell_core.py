@@ -17,6 +17,8 @@ class Cells(object):
     def get_random_cells(self):
         full_list = np.arange(len(self.pic_path_list))
         np.random.shuffle(full_list)
+        while len(full_list) < GRID_LENGTH * GRID_LENGTH:
+            full_list = np.copy(np.concatenate((full_list, full_list)))
         return full_list[:GRID_LENGTH*GRID_LENGTH].reshape((GRID_LENGTH, GRID_LENGTH))
 
     def draw(self, screen):
